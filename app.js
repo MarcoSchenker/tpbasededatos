@@ -47,6 +47,33 @@ app.get('/buscar', (req, res) => {
     );
 });
 
+// Ruta para buscar actor por pelicula
+app.get('/buscarActor', (req, res) => {
+    const searchTerm = req.query.q;
+    const query = `
+        select m.title
+            from movie m
+            inner join movie_cast mc on mc.movie_id = m.movie_id
+            inner join person p on p.person_id = mc.person_id
+            where p.person_name like ?
+        `;
+
+    // Realizar la búsqueda en la base de datos
+    db.all(
+        query,
+        [`%${searchTerm}%`],
+        (err, rows) => {
+            if (err) {
+                console.error(err);
+                res.status(500).send('Error en la búsqueda.');
+            } else {
+                res.render('resultado', { movies: rows });
+            }
+        }
+    );
+});
+
+
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
     const movieId = req.params.id;
