@@ -8,7 +8,7 @@ const port = process.env.PORT || 3000;
 // Serve static files from the "views" directory
 app.use(express.static('views'));
 
-// Path completo de la base de datos movies.db
+// FACA COMO ORGANIZAMOS LOS EJERS, HACEMOS DS? O CADA UNO X SU CUENTA?
 // Por ejemplo 'C:\\Users\\datagrip\\movies.db'
 // Aca se usa la ruta absoluta
 //const db = new sqlite3.Database('C:/Users/nacug/Faculty/base-de-datos/tpbasededatos/movies.db');
