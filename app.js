@@ -60,7 +60,17 @@ app.get('/buscar', (req, res) => {
             WHERE job = 'Director' 
             AND person_name LIKE ?
         `;
-    } else {
+    } else if (type === 'keyword') { //pongo consulta sql para buscar por keyword
+        query = `
+        SELECT DISTINCT 'keyword' as type, m.title as name, m.movie_id as id
+        FROM movie m
+        INNER JOIN movie_keywords mk ON m.movie_id = mk.movie_id
+        INNER JOIN keyword k ON mk.keyword_id = k.keyword_id
+        WHERE keyword_name LIKE ?
+        `;
+    }
+
+    else {
         //Si no se le pasa el tipo entonces envio un error.
         return res.status(400).send('Tipo de búsqueda no válido. Debe ser "movie", "actor" o "director".');
     }
