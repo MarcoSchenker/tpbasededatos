@@ -24,7 +24,9 @@
 
 <h3>País de Producción:</h3>
 <ul>
-  <% movie.production_countries.forEach((country) => { %>
+  <% 
+  const uniqueCountries = [...new Set(movie.production_countries)]; // Eliminar duplicados
+  uniqueCountries.forEach((country) => { %>
     <li><%= country %></li>
   <% }); %>
 </ul>
