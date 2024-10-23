@@ -35,7 +35,18 @@
         <li><a href="/director/<%= director.id %>"><%= director.name %></a></li>
       <% }) %>
     </ul>
-  <% } else { %>
+  <% } else if (type === 'keyword' && results.length > 0) { %> <!-- agrego buscador por keyword que busca mis peliculas con esa keyword -->
+      <h2>Películas</h2>
+      <ul>
+          <% results.forEach(movie => { %>
+              <!-- Hay que aclarar que id = movie_id , name = title (esto lo define cuando hace la query a la hora de buscar) -->
+              <!-- Este es un link que busca por el Pelicula-->
+              <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
+          <% }) %>
+      </ul>
+  <% }
+
+  else { %>
     <p>No se encontraron resultados.</p>
   <% } %>
 
