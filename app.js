@@ -1,14 +1,14 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const ejs = require('ejs');
-
+//probando tema de pull si alguien cambia el main antes(2da vez)
 const app = express();
 const port = process.env.PORT || 3000;
 
 // Serve static files from the "views" directory
 app.use(express.static('views'));
 
-// (FACA COMO ORGANIZAMOS LOS EJERS, HACEMOS DS? O CADA UNO X SU CUENTA)
+// Path completo de la base de datos movies.db
 // Por ejemplo 'C:\\Users\\datagrip\\movies.db'
 // Aca se usa la ruta absoluta
 //const db = new sqlite3.Database('C:/Users/nacug/Faculty/base-de-datos/tpbasededatos/movies.db');
