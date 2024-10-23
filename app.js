@@ -1,7 +1,7 @@
 const express = require('express');
 const sqlite3 = require('sqlite3').verbose();
 const ejs = require('ejs');
-//probando tema de pull si alguien cambia el main antes
+//probando tema de pull si alguien cambia el main antes(2da vez)
 const app = express();
 const port = process.env.PORT || 3000;
 
