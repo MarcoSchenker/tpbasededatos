@@ -5,17 +5,40 @@
   <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-<h1>Resultado de la Búsqueda</h1>
-<% if (movies.length === 0) { %>
-  <p>No hay resultados.</p>
-<% } else { %>
-  <ul>
-    <% movies.forEach((movie) => { %>
-      <li><a href="/pelicula/<%= movie.movie_id %>"><%= movie.title %></a></li>
-    <% }); %>
-  </ul>
-<% } %>
-<p></p>
-<div id="inicio"><a href="/">Inicio</a></div>
+  <h1>Resultados para "<%= searchTerm %>"</h1>
+
+  <!-- Generamos links a partir de los IDs (person o movie) que nos llevan a la página de la película, el actor o el director-->
+  <% if (type === 'movie' && results.length > 0) { %>
+    <h2>Películas</h2>
+    <ul>
+      <% results.forEach(movie => { %>
+        <!-- Hay que aclarar que id = movie_id , name = title (esto lo define cuando hace la query a la hora de buscar) -->
+        <!-- Este es un link que busca por el Pelicula-->
+        <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
+      <% }) %>
+    </ul>
+  <% } else if (type === 'actor' && results.length > 0) { %>
+    <h2>Actores</h2>
+    <ul>
+      <!-- Hay que aclarar que id = person_id , name = person_name (esto lo define cuando hace la query a la hora de buscar) -->
+      <!-- Este es un link que busca por el Actor-->
+      <% results.forEach(actor => { %>
+        <li><a href="/actor/<%= actor.id %>"><%= actor.name %></a></li>
+      <% }) %>
+    </ul>
+  <% } else if (type === 'director' && results.length > 0) { %>
+    <h2>Directores</h2>
+    <ul>
+      <% results.forEach(director => { %>
+        <!-- Hay que aclarar que id = person_id , name = person_name (esto lo define cuando hace la query a la hora de buscar) -->
+        <!-- Este es un link que busca por el director-->
+        <li><a href="/director/<%= director.id %>"><%= director.name %></a></li>
+      <% }) %>
+    </ul>
+  <% } else { %>
+    <p>No se encontraron resultados.</p>
+  <% } %>
+
+  <div id="inicio"><a href="/">Inicio</a></div>
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html>
 <head>
   <title>MovieWeb</title>
@@ -50,15 +50,29 @@
 </head>
 <body>
 <h1>MovieWeb</h1>
+<!-- Así se comenta, god-->
+<!-- En la main page ahora hay una caja en la cual podemos seleccionar que tipo buscar (película, actor o director) -->
 <form action="/buscar" method="GET">
-  <input type="text" name="q" placeholder="Buscar pelicula..." />
+  <input type="text" name="q" placeholder="Buscar..." required />
+  <select name="type" required>
+    <option value="movie">Película</option>
+    <option value="actor">Actor</option>
+    <option value="director">Director</option>
+  </select>
   <button type="submit">Buscar</button>
 </form>
 
-<form action="/buscarActor" method="GET">
+
+<!-- Para el recuerdo:
+
+<form action="/buscarActor" method="GET"> 
   <input type="text" name="q" placeholder="Buscar actor..." />
   <button type="submit">Buscar</button>
 </form>
-
+<form action="/buscarCrew" method="GET"> 
+  <input type="text" name="q" placeholder="Buscar crew..." />
+  <button type="submit">Buscar</button>
+</form>
+-->
 </body>
-</html>
+</html> 
