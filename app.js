@@ -28,7 +28,59 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
-// Ruta para buscar películas
+// 1. Búsqueda de películas, actores y directores (Terminado)
+// Puede buscar cada uno y los muestra en secciones separadas
+
+app.get('/buscar', (req, res) => {
+    const searchTerm = req.query.q;
+    // Como tengo que buscar por peli, director o actor entonces creamos una variable type para identificar en que tabla buscar. 
+    // Este type es el que le pasamos en index.ejs (en la caja)
+    const type = req.query.type; 
+
+    let query = '';
+    let params = [`%${searchTerm}%`]; //Parametro que recibe
+
+    // Seleccionamos la consulta SQL dependiendo del tipo de búsqueda (dependiendo el type)
+    if (type === 'movie') {
+        query = `SELECT 'movie' as type, title as name, movie_id as id
+        FROM movie
+        WHERE title LIKE ?`;
+    } else if (type === 'actor') {
+        query = `
+            SELECT DISTINCT 'actor' as type, person_name as name, p.person_id as id 
+            FROM person p
+            INNER JOIN movie_cast mc on p.person_id = mc.person_id
+            WHERE person_name LIKE ?
+        `;
+    } else if (type === 'director') {
+        query = `
+            SELECT DISTINCT 'director' as type, person_name as name, p.person_id as id 
+            FROM person p
+            INNER JOIN movie_crew mcr on p.person_id = mcr.person_id
+            WHERE job = 'Director' 
+            AND person_name LIKE ?
+        `;
+    } else {
+        //Si no se le pasa el tipo entonces envio un error.
+        return res.status(400).send('Tipo de búsqueda no válido. Debe ser "movie", "actor" o "director".');
+    }
+
+
+    // Ejecutamos la consulta (query guarda la consulta, params es lo que buscas, rows son las filas a mostrar)
+    db.all(query, params, (err, rows) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error en la búsqueda.'); 
+        } else {
+            // Filtramos los resultados por el tipo. SearchTerm es el params
+            res.render('resultado', { results: rows, searchTerm, type });
+        }
+    });
+});
+
+//Este es el Buscar orginal, lo dejamos por las dudas para saber la estructura de como hacerlo.
+/*
+// Ruta para buscar películas   
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
 
@@ -46,33 +98,7 @@ app.get('/buscar', (req, res) => {
         }
     );
 });
-
-// Ruta para buscar actor por pelicula
-app.get('/buscarActor', (req, res) => {
-    const searchTerm = req.query.q;
-    const query = `
-        select m.title
-            from movie m
-            inner join movie_cast mc on mc.movie_id = m.movie_id
-            inner join person p on p.person_id = mc.person_id
-            where p.person_name like ?
-        `;
-
-    // Realizar la búsqueda en la base de datos
-    db.all(
-        query,
-        [`%${searchTerm}%`],
-        (err, rows) => {
-            if (err) {
-                console.error(err);
-                res.status(500).send('Error en la búsqueda.');
-            } else {
-                res.render('resultado', { movies: rows });
-            }
-        }
-    );
-});
-
+*/
 
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
