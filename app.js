@@ -68,31 +68,30 @@ app.get('/buscar', (req, res) => {
 app.get('/pelicula/:id', (req, res) => {
     const movieId = req.params.id;
 
+    // Consulta SQL para obtener los datos de la película, elenco y crew
     const query = `
-        SELECT *
-        FROM movie m 
-        -- Géneros
-        inner join movie_genres mg ON m.movie_id = mg.movie_id
-        inner join genre ON mg.genre_id = genre.genre_id
-        -- Production Countries
-        inner join production_country pcoun ON m.movie_id = pcoun.movie_id
-        inner join country ON pcoun.country_id = country.country_id
-        -- Companies
-        inner join movie_company mcom ON m.movie_id = mcom.movie_id
-        inner join production_company pcom ON mcom.company_id = pcom.company_id
-        -- Languages
-        inner join movie_languages mlan ON m.movie_id = mlan.movie_id
-        inner join language ON mlan.language_id = language.language_id
-        -- Crew
-         inner join movie_crew mcr ON m.movie_id = mcr.movie_id
-         inner join department ON mcr.department_id = department.department_id
-        -- Cast
-        inner join movie_cast ON m.movie_id = movie_cast.movie_id
-        inner join person ON movie_cast.person_id = person.person_id
-        
-        WHERE m.movie_id = ? AND mcr.job = 'Director' 
-    `;
+    SELECT
+      movie.*,
+      actor.person_name as actor_name,
+      actor.person_id as actor_id,
+      crew_member.person_name as crew_member_name,
+      crew_member.person_id as crew_member_id,
+      movie_cast.character_name,
+      movie_cast.cast_order,
+      department.department_name,
+      movie_crew.job
+    FROM movie
+    LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
+    LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
+    LEFT JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
+    LEFT JOIN department ON movie_crew.department_id = department.department_id
+    LEFT JOIN person as crew_member ON crew_member.person_id = movie_crew.person_id
+    LEFT JOIN production_country pc ON movie.movie_id = pc.movie_id
+    LEFT JOIN country ON pc.country_id = country.country_id
+    WHERE movie.movie_id = ?
+  `;
 
+    // Ejecutar la consulta
     db.all(query, [movieId], (err, rows) => {
         if (err) {
             console.error(err);
@@ -100,8 +99,9 @@ app.get('/pelicula/:id', (req, res) => {
         } else if (rows.length === 0) {
             res.status(404).send('Película no encontrada.');
         } else {
+            // Organizar los datos en un objeto de película con elenco y crew
             const movieData = {
-                id: rows[0].movie_id,
+                id: rows[0].id,
                 title: rows[0].title,
                 release_date: rows[0].release_date,
                 overview: rows[0].overview,
@@ -109,62 +109,112 @@ app.get('/pelicula/:id', (req, res) => {
                 writers: [],
                 cast: [],
                 crew: [],
-                genres: [],
-                production_company: rows[0].company_name,
-                movie_language: rows[0].language_name,
-                production_countries: [],
-                keywords: [],
+                countries: [],
             };
-
+             // Crear un objeto para almacenar countries
+             rows.forEach((row) => {
+                if (row.country_name) {
+                    // Verificar si ya existe el país en la lista de countries
+                    const isDuplicate = movieData.countries.some((country) =>
+                        country === row.country_name
+                    );
+            
+                    if (!isDuplicate) {
+                        // Si no existe, agregar el país a la lista de countries
+                        movieData.countries.push(row.country_name);
+                    }
+                }
+            }); 
+            
+            // Crear un objeto para almacenar directores
             rows.forEach((row) => {
-                // Agregar géneros
-                if (row.genre_name && !movieData.genres.includes(row.genre_name)) {
-                    movieData.genres.push(row.genre_name);
-                }
+                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
+                    // Verificar si ya existe una entrada con los mismos valores en directors
+                    const isDuplicate = movieData.directors.some((crew_member) =>
+                        crew_member.crew_member_id === row.crew_member_id
+                    );
 
-                // Agregar países de producción
-                if (row.country_name && !movieData.production_countries.includes(row.country_name)) {
-                    movieData.production_countries.push(row.country_name);
-                }
-
-                // Agregar directores y escritores
-                if (row.person_name) {
-                    if (row.job === 'Director' && !movieData.directors.includes(row.person_name)) {
-                        movieData.directors.push(row.person_name); // Agrega el director si no está ya
-                    } else if (row.job === 'Writer' && !movieData.writers.includes(row.person_name)) {
-                        movieData.writers.push(row.person_name); // Agrega el escritor si no está ya
+                    if (!isDuplicate) {
+                        // Si no existe, agregar los datos a la lista de directors
+                        if (row.department_name === 'Directing' && row.job === 'Director') {
+                            movieData.directors.push({
+                                crew_member_id: row.crew_member_id,
+                                crew_member_name: row.crew_member_name,
+                                department_name: row.department_name,
+                                job: row.job,
+                            });
+                        }
                     }
                 }
+            });
 
-                // Agregar miembros del elenco
-                if (row.cast_order && row.character_name) {
-                    // Verificar que el actor no esté ya en el elenco
-                    const actorExists = movieData.cast.some(actor => actor.actor_id === row.person_id);
-                    if (!actorExists) {
+            // Crear un objeto para almacenar writers
+            rows.forEach((row) => {
+                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
+                    // Verificar si ya existe una entrada con los mismos valores en writers
+                    const isDuplicate = movieData.writers.some((crew_member) =>
+                        crew_member.crew_member_id === row.crew_member_id
+                    );
+
+                    if (!isDuplicate) {
+                        // Si no existe, agregar los datos a la lista de writers
+                        if (row.department_name === 'Writing' && row.job === 'Writer') {
+                            movieData.writers.push({
+                                crew_member_id: row.crew_member_id,
+                                crew_member_name: row.crew_member_name,
+                                department_name: row.department_name,
+                                job: row.job,
+                            });
+                        }
+                    }
+                }
+            });
+
+            // Crear un objeto para almacenar el elenco
+            rows.forEach((row) => {
+                if (row.actor_id && row.actor_name && row.character_name) {
+                    // Verificar si ya existe una entrada con los mismos valores en el elenco
+                    const isDuplicate = movieData.cast.some((actor) =>
+                        actor.actor_id === row.actor_id
+                    );
+
+                    if (!isDuplicate) {
+                    // Si no existe, agregar los datos a la lista de elenco
                         movieData.cast.push({
-                            actor_id: row.person_id, // ID del actor
-                            actor_name: row.person_name, // Nombre del actor
-                            character_name: row.character_name, // Nombre del personaje
-                            cast_order: row.cast_order // Orden del elenco
-                        });
-                    }
-                }
-
-                // Agregar miembros del crew
-                if (row.job && row.person_name) {
-                    // Verificar que el miembro del crew no esté ya en el elenco
-                    const crewExists = movieData.crew.some(crewMember => crewMember.crew_member_name === row.person_name && crewMember.job === row.job);
-                    if (!crewExists) {
-                        movieData.crew.push({
-                            crew_member_name: row.person_name, // Nombre del miembro del crew
-                            department_name: row.department_name, // Nombre del departamento
-                            job: row.job // Trabajo del miembro del crew
+                            actor_id: row.actor_id,
+                            actor_name: row.actor_name,
+                            character_name: row.character_name,
+                            cast_order: row.cast_order,
                         });
                     }
                 }
             });
 
-            // Renderizar la vista
+            // Crear un objeto para almacenar el crew
+            rows.forEach((row) => {
+                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
+                    // Verificar si ya existe una entrada con los mismos valores en el crew
+                    const isDuplicate = movieData.crew.some((crew_member) =>
+                        crew_member.crew_member_id === row.crew_member_id
+                    );
+
+                    // console.log('movieData.crew: ', movieData.crew)
+                    // console.log(isDuplicate, ' - row.crew_member_id: ', row.crew_member_id)
+                    if (!isDuplicate) {
+                        // Si no existe, agregar los datos a la lista de crew
+                        if (row.department_name !== 'Directing' && row.job !== 'Director'
+                        && row.department_name !== 'Writing' && row.job !== 'Writer') {
+                            movieData.crew.push({
+                                crew_member_id: row.crew_member_id,
+                                crew_member_name: row.crew_member_name,
+                                department_name: row.department_name,
+                                job: row.job,
+                            });
+                        }
+                    }
+                }
+            });
+
             res.render('pelicula', { movie: movieData });
         }
     });
