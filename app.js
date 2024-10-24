@@ -23,9 +23,9 @@ app.get('/', (req, res) => {
 // Búsqueda de películas, actores, directores y palabras clave
 app.get('/buscar', (req, res) => {
     const searchTerm = req.query.q;
-    const type = req.query.type;
+    const type = req.query.type; 
     let query = '';
-    let params = [`%${searchTerm}%`];
+    let params = [`%${searchTerm}%`]; 
 
     if (type === 'movie') {
         query = `SELECT 'movie' as type, title as name, movie_id as id FROM movie WHERE title LIKE ?`;
@@ -55,7 +55,7 @@ app.get('/buscar', (req, res) => {
     db.all(query, params, (err, rows) => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error en la búsqueda.');
+            res.status(500).send('Error en la búsqueda.'); 
         } else {
             res.render('resultado', { results: rows, searchTerm, type });
         }
@@ -88,7 +88,7 @@ app.get('/pelicula/:id', (req, res) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Error al cargar los datos de la película.');
-        }
+        } 
         if (!movieRow) {
             return res.status(404).send('Película no encontrada.');
         }

@@ -7,8 +7,6 @@
 <<<<<<< HEAD
     <list default="true" id="5bceb46f-e395-4dd0-bd81-9e2670061928" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/pelicula.ejs" beforeDir="false" afterPath="$PROJECT_DIR$/views/pelicula.ejs" afterDir="false" />
     </list>
 =======
     <list default="true" id="5bceb46f-e395-4dd0-bd81-9e2670061928" name="Changes" comment="" />
@@ -26,18 +24,6 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GitHubPullRequestSearchHistory">{
-  &quot;lastFilter&quot;: {
-    &quot;state&quot;: &quot;OPEN&quot;,
-    &quot;assignee&quot;: &quot;ignaciogaspar&quot;
-  }
-}</component>
-  <component name="GithubPullRequestsUISettings">{
-  &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/Facundo-Lanusse/tpbasededatos.git&quot;,
-    &quot;accountId&quot;: &quot;566fcf55-f786-4b7d-8ff2-305be33b4d6e&quot;
-  }
-}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -48,36 +34,22 @@
     <option name="showLibraryContents" value="true" />
   </component>
 <<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> fb7f10b003b99f32b71f18ef7b336ea9fa652831
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;Node.js.app.js.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.OpenDatabaseViewOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-<<<<<<< HEAD
-    &quot;git-widget-placeholder&quot;: &quot;ignaciogaspar&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;20.18.0&quot;,
-    &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;20.17.0&quot;,
-=======
     &quot;git-widget-placeholder&quot;: &quot;facu-lanusse&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;javascript.nodejs.core.library.configured.version&quot;: &quot;22.9.0&quot;,
     &quot;javascript.nodejs.core.library.typings.version&quot;: &quot;22.7.9&quot;,
->>>>>>> fb7f10b003b99f32b71f18ef7b336ea9fa652831
     &quot;last_opened_file_path&quot;: &quot;C:/Users/nacug/Faculty/base-de-datos/tpbasededatos/movies.db&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-<<<<<<< HEAD
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2024.2.3\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
-=======
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
 =======
   <component name="PropertiesComponent"><![CDATA[{
@@ -99,7 +71,6 @@
     "ts.external.directory.path": "/Applications/WebStorm.app/Contents/plugins/javascript-plugin/jsLanguageServicesImpl/external",
     "vue.rearranger.settings.migration": "true"
 >>>>>>> 9681beb348e05d3a5c06c20c22922e0f5c661cb7
->>>>>>> fb7f10b003b99f32b71f18ef7b336ea9fa652831
   }
 }</component>
   <component name="SharedIndexes">
@@ -121,7 +92,6 @@
       <workItem from="1729370185769" duration="1282000" />
       <workItem from="1729686672870" duration="3389000" />
       <workItem from="1729696683908" duration="616000" />
-      <workItem from="1729731697315" duration="577000" />
     </task>
     <servers />
   </component>
