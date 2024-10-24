@@ -113,7 +113,7 @@ app.get('/buscar', (req, res) => {
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
     const movieId = req.params.id;
-
+    //Te tiene que devolver: Genero, Todo lo de la tabla peli, Pais produccion, la compañia, lenguaje
     // Consulta SQL para obtener los datos de la película, elenco y crew
     const query = `
     SELECT
@@ -127,13 +127,15 @@ app.get('/pelicula/:id', (req, res) => {
       department.department_name,
       movie_crew.job,
 
-       -- CODIGO NUEVO
+
+    ------------------CODIGO NUEVO-------------------
       genre.genre_name,
       production_company.company_name as production_company,
       language.language_name as movie_language,
-      country.country_name,
+      country.country_name
       keyword.keyword_name as movie_keyword
 
+    -------------------------------------------------
     FROM movie
     LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
     LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
@@ -141,7 +143,7 @@ app.get('/pelicula/:id', (req, res) => {
     LEFT JOIN department ON movie_crew.department_id = department.department_id
     LEFT JOIN person as crew_member ON crew_member.person_id = movie_crew.person_id
     
-    -- CODIGO NUEVO
+    -----------------CODIGO NUEVO---------------------
     -- genero de la pelicula
     LEFT JOIN movie_genres ON movie.movie_id = movie_genres.movie_id
     LEFT JOIN genre ON movie_genres.genre_id = genre.genre_id
@@ -157,8 +159,8 @@ app.get('/pelicula/:id', (req, res) => {
         -- pais de produccion
     LEFT JOIN production_country ON movie.movie_id = production_country.movie_id
     LEFT JOIN country ON production_country.country_id = country.country_id
-
-        -- keyword de la pelicula
+        -----------------------------------------------
+    -- keyword de la pelicula
     LEFT JOIN  movie_keywords ON movie.movie_id = movie_keywords.movie_id
     LEFT JOIN keyword On movie_keywords.keyword_id = keyword.keyword_id
     WHERE movie.movie_id = ?

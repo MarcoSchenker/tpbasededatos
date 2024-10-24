@@ -9,9 +9,9 @@
 <h3>Fecha: <%= movie.release_date %></h3>
 <h3>Géneros:</h3>
 <ul>
-  <% 
+  <%
   const uniqueGenres = [...new Set(movie.genres)]; // Eliminar duplicados
-  uniqueGenres.forEach((genre) => { %>  
+  uniqueGenres.forEach((genre) => { %>
     <li><%= genre %></li>
   <% }); %>
 </ul>
@@ -24,7 +24,7 @@
 
 <h3>País de Producción:</h3>
 <ul>
-  <% 
+  <%
   const uniqueCountries = [...new Set(movie.production_countries)]; // Eliminar duplicados
   uniqueCountries.forEach((country) => { %>
     <li><%= country %></li>
@@ -42,7 +42,7 @@
 
 <h3>Escrita por:</h3>
 <ul>
-  <% movie.writers.forEach((writer) => { %>   
+  <% movie.writers.forEach((writer) => { %>
     <li>
       <a href="/writer/<%= writer.crew_member_id %>"><%= writer.crew_member_name %></a>
     </li>
@@ -71,7 +71,7 @@
 
 <h3>Palabras Clave:</h3>
 <ul>
-  <% 
+  <%
   const uniqueKeywords = [...new Set(movie.keywords)]; // Eliminar duplicados
   uniqueKeywords.forEach((keyword) => { %>
     <li><%= keyword %></li>
