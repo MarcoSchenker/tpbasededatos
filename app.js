@@ -132,7 +132,11 @@ app.get('/pelicula/:id', (req, res) => {
       genre.genre_name,
       production_company.company_name as production_company,
       language.language_name as movie_language,
+<<<<<<< HEAD
       country.country_name
+=======
+      country.country_name as production_countries,
+>>>>>>> fb7f10b003b99f32b71f18ef7b336ea9fa652831
       keyword.keyword_name as movie_keyword
 
     -------------------------------------------------
