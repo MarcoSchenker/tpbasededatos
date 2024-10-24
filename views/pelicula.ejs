@@ -1,405 +1,356 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<<<<<<< HEAD
   <style>
-      /* General styles for the body */
-      body {
-          font-family: 'Arial', sans-serif;
-          background-color: #f5f5f5;
-          color: #333333;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          justify-content: flex-start;
-          min-height: 100vh;
-      }
+    /* General styles for the body */
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+    }
 
-      /* Container for the content */
+    /* Container for the content */
+    .container {
+      width: 100%;
+      max-width: 900px;
+      background-color: #ffffff;
+      margin: 20px 0;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+
+    /* Title styles */
+    h1 {
+      font-size: 36px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    /* Subtitles (h3) */
+    h3 {
+      font-size: 24px;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+    }
+
+    /* Paragraph styles */
+    p {
+      font-size: 18px;
+      color: #333333;
+      line-height: 1.6;
+      margin-bottom: 20px;
+    }
+
+    /* List styles */
+    ul {
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 20px;
+    }
+
+    li {
+      font-size: 18px;
+      color: #555555;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, background-color 0.3s ease;
+    }
+
+    li:hover {
+      background-color: #eef7ff;
+      transform: translateY(-3px);
+    }
+
+    /* Links for director, writer, actor */
+    a {
+      text-decoration: none;
+      color: #0078d4;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+
+    a:hover {
+      color: #0056b3;
+    }
+
+    /* Overview section with background and padding */
+    #overview {
+      background-color: #eef7ff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      font-size: 18px;
+      color: #333333;
+    }
+
+    /* Button back to homepage */
+    #inicio {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    #inicio a {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    #inicio a:hover {
+      background-color: #0056b3;
+      transform: translateY(-3px);
+    }
+
+    /* Responsive design for smaller screens */
+    @media (max-width: 600px) {
       .container {
-          width: 100%;
-          max-width: 900px;
-          background-color: #ffffff;
-          margin: 20px 0;
-          padding: 30px;
-          border-radius: 10px;
-          box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-          text-align: left;
+        padding: 20px;
       }
 
-      /* Title styles */
       h1 {
-          font-size: 36px;
-          text-align: center;
-          margin-bottom: 20px;
+        font-size: 28px;
       }
 
-      /* Subtitles (h3) */
       h3 {
-          font-size: 24px;
-          margin-bottom: 10px;
-          padding-bottom: 5px;
+        font-size: 20px;
       }
 
-      /* Paragraph styles */
-      p {
-          font-size: 18px;
-          color: #333333;
-          line-height: 1.6;
-          margin-bottom: 20px;
+      p, li {
+        font-size: 16px;
       }
-
-      /* List styles */
-      ul {
-          list-style: none;
-          padding: 0;
-          margin: 10px 0 20px;
-      }
-
-      li {
-          font-size: 18px;
-          color: #555555;
-          margin-bottom: 10px;
-          padding: 10px;
-          background-color: #f9f9f9;
-          border-radius: 5px;
-          box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease, background-color 0.3s ease;
-      }
-
-      li:hover {
-          background-color: #eef7ff;
-          transform: translateY(-3px);
-      }
-
-      /* Links for director, writer, actor */
-      a {
-          text-decoration: none;
-          color: #0078d4;
-          font-weight: bold;
-          transition: color 0.3s ease;
-      }
-
-      a:hover {
-          color: #0056b3;
-      }
-
-      /* Overview section with background and padding */
-      #overview {
-          background-color: #eef7ff;
-          padding: 20px;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          margin-bottom: 20px;
-          line-height: 1.6;
-          font-size: 18px;
-          color: #333333;
-      }
-
-      /* Button back to homepage */
-      #inicio {
-          text-align: center;
-          margin-top: 30px;
-      }
-
-      #inicio a {
-          display: inline-block;
-          padding: 12px 30px;
-          background-color: #0078d4;
-          color: white;
-          text-decoration: none;
-          border-radius: 25px;
-          font-size: 16px;
-          transition: background-color 0.3s ease, transform 0.3s ease;
-      }
-
-      #inicio a:hover {
-          background-color: #0056b3;
-          transform: translateY(-3px);
-      }
-
-      /* Responsive design for smaller screens */
-      @media (max-width: 600px) {
-          .container {
-              padding: 20px;
-          }
-
-          h1 {
-              font-size: 28px;
-          }
-
-          h3 {
-              font-size: 20px;
-          }
-
-          p, li {
-              font-size: 16px;
-          }
-      }
+    }
 
 
 
   </style>
-=======
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
->>>>>>> 55adc650f198f71c9ba2cd64b714c99aab4a429b
   <title><%= movie.title %></title>
   <link rel="stylesheet" href="/styles.css">
   <style>
     /* General styles for the body */
     body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f5f5f5;
-        color: #333333;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        min-height: 100vh;
+      font-family: 'Arial', sans-serif;
+      background-color: #f5f5f5;
+      color: #333333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
     }
 
     /* Container for the content */
     .container {
-        width: 100%;
-        max-width: 900px;
-        background-color: #ffffff;
-        margin: 20px 0;
-        padding: 30px;
-        border-radius: 10px;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
-        text-align: left;
+      width: 100%;
+      max-width: 900px;
+      background-color: #ffffff;
+      margin: 20px 0;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+      text-align: left;
     }
 
     /* Title styles */
     h1 {
-        font-size: 36px;
-        text-align: center;
-        margin-bottom: 20px;
+      font-size: 36px;
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     /* Subtitles (h3) */
     h3 {
-        font-size: 24px;
-        margin-bottom: 10px;
-        padding-bottom: 5px;
+      font-size: 24px;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
     }
 
     /* Paragraph styles */
     p {
-        font-size: 18px;
-        color: #333333;
-        line-height: 1.6;
-        margin-bottom: 20px;
+      font-size: 18px;
+      color: #333333;
+      line-height: 1.6;
+      margin-bottom: 20px;
     }
 
     /* List styles */
     ul {
-        list-style: none;
-        padding: 0;
-        margin: 10px 0 20px;
+      list-style: none;
+      padding: 0;
+      margin: 10px 0 20px;
     }
 
     li {
-        font-size: 18px;
-        color: #555555;
-        margin-bottom: 10px;
-        padding: 10px;
-        background-color: #f9f9f9;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: transform 0.3s ease, background-color 0.3s ease;
+      font-size: 18px;
+      color: #555555;
+      margin-bottom: 10px;
+      padding: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, background-color 0.3s ease;
     }
 
     li:hover {
-        background-color: #eef7ff;
-        transform: translateY(-3px);
+      background-color: #eef7ff;
+      transform: translateY(-3px);
     }
 
     /* Links for director, writer, actor */
     a {
-        text-decoration: none;
-        color: #0078d4;
-        font-weight: bold;
-        transition: color 0.3s ease;
+      text-decoration: none;
+      color: #0078d4;
+      font-weight: bold;
+      transition: color 0.3s ease;
     }
 
     a:hover {
-        color: #0056b3;
+      color: #0056b3;
     }
 
     /* Overview section with background and padding */
     #overview {
-        background-color: #eef7ff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        margin-bottom: 20px;
-        line-height: 1.6;
-        font-size: 18px;
-        color: #333333;
+      background-color: #eef7ff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 20px;
+      line-height: 1.6;
+      font-size: 18px;
+      color: #333333;
     }
 
     /* Button back to homepage */
     #inicio {
-        text-align: center;
-        margin-top: 30px;
+      text-align: center;
+      margin-top: 30px;
     }
 
     #inicio a {
-        display: inline-block;
-        padding: 12px 30px;
-        background-color: #0078d4;
-        color: white;
-        text-decoration: none;
-        border-radius: 25px;
-        font-size: 16px;
-        transition: background-color 0.3s ease, transform 0.3s ease;
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: #0078d4;
+      color: white;
+      text-decoration: none;
+      border-radius: 25px;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.3s ease;
     }
 
     #inicio a:hover {
-        background-color: #0056b3;
-        transform: translateY(-3px);
+      background-color: #0056b3;
+      transform: translateY(-3px);
     }
 
     /* Responsive design for smaller screens */
     @media (max-width: 600px) {
-        .container {
-            padding: 20px;
-        }
+      .container {
+        padding: 20px;
+      }
 
-        h1 {
-            font-size: 28px;
-        }
+      h1 {
+        font-size: 28px;
+      }
 
-        h3 {
-            font-size: 20px;
-        }
+      h3 {
+        font-size: 20px;
+      }
 
-        p, li {
-            font-size: 16px;
-        }
+      p, li {
+        font-size: 16px;
+      }
     }
 
 
 
-</style>
+  </style>
 </head>
 <body>
-<<<<<<< HEAD
-<h1><%= movie.title %></h1>
-<h3>Fecha: <%= movie.release_date %></h3>
-<h3>Géneros:</h3>
-<ul>
-  <%
-  const uniqueGenres = [...new Set(movie.genres)]; // Eliminar duplicados
-  uniqueGenres.forEach((genre) => { %>
-    <li><%= genre %></li>
-  <% }); %>
-</ul>
-=======
-  <div class="container">
-    <h1><%= movie.title %></h1>
-    <h3>Fecha: <%= movie.release_date %></h3>
->>>>>>> 55adc650f198f71c9ba2cd64b714c99aab4a429b
+<div class="container">
+  <h1><%= movie.title %></h1>
+  <h3>Fecha: <%= movie.release_date %></h3>
 
-    <h3>Géneros:</h3>
-    <ul>
-      <% movie.genres.forEach((genre) => { %>
-        <li><%= genre %></li>
-      <% }); %>
-    </ul>
+  <h3>Géneros:</h3>
+  <ul>
+    <% movie.genres.forEach((genre) => { %>
+      <li><%= genre %></li>
+    <% }); %>
+  </ul>
 
-    <h3>Compañía de Producción:</h3>
-    <ul>
-      <% movie.company_name.forEach((company) => { %>
-        <li><%= company %></li>
-      <% }); %>
-    </ul>
+  <h3>Compañía de Producción:</h3>
+  <ul>
+    <% movie.company_name.forEach((company) => { %>
+      <li><%= company %></li>
+    <% }); %>
+  </ul>
 
-<<<<<<< HEAD
-<h3>País de Producción:</h3>
-<ul>
-  <%
-  const uniqueCountries = [...new Set(movie.production_countries)]; // Eliminar duplicados
-  uniqueCountries.forEach((country) => { %>
-    <li><%= country %></li>
-  <% }); %>
-</ul>
-=======
-    <h3>Idioma de la Película:</h3>
-    <p><%= movie.languages %></p>
->>>>>>> 6820b4ad90a3b0a766becb4af105987bb033f415
+  <h3>Idioma de la Película:</h3>
+  <p><%= movie.languages %></p>
 
-    <h3>País de Producción:</h3>
-    <ul>
-      <% movie.countries.forEach((country) => { %>
-        <li><%= country %></li>
-      <% }); %>
-    </ul>
+  <h3>País de Producción:</h3>
+  <ul>
+    <% movie.countries.forEach((country) => { %>
+      <li><%= country %></li>
+    <% }); %>
+  </ul>
 
-<<<<<<< HEAD
-<h3>Escrita por:</h3>
-<ul>
-  <% movie.writers.forEach((writer) => { %>
-    <li>
-      <a href="/writer/<%= writer.crew_member_id %>"><%= writer.crew_member_name %></a>
-    </li>
-  <% }); %>
-</ul>
-=======
-    <h3>Dirigida por:</h3>
-    <ul>
-      <% movie.directors.forEach((director) => { %>
-        <li>
-          <a href="/director/<%= director.crew_member_id %>"><%= director.crew_member_name %></a>
-        </li>
-      <% }); %>
-    </ul>
->>>>>>> 6820b4ad90a3b0a766becb4af105987bb033f415
+  <h3>Dirigida por:</h3>
+  <ul>
+    <% movie.directors.forEach((director) => { %>
+      <li>
+        <a href="/director/<%= director.crew_member_id %>"><%= director.crew_member_name %></a>
+      </li>
+    <% }); %>
+  </ul>
 
-    <h3>Escrita por:</h3>
-    <ul>
-      <% movie.writers.forEach((writer) => { %>
-        <li>
-          <a href="/writer/<%= writer.crew_member_id %>"><%= writer.crew_member_name %></a>
-        </li>
-      <% }); %>
-    </ul>
+  <h3>Escrita por:</h3>
+  <ul>
+    <% movie.writers.forEach((writer) => { %>
+      <li>
+        <a href="/writer/<%= writer.crew_member_id %>"><%= writer.crew_member_name %></a>
+      </li>
+    <% }); %>
+  </ul>
 
-    <h3>Argumento:</h3>
-    <div id="overview"><p><%= movie.overview %></p></div>
+  <h3>Argumento:</h3>
+  <div id="overview"><p><%= movie.overview %></p></div>
 
-    <h3>Elenco:</h3>
-    <ul>
-      <% movie.cast.sort((a, b) => a.cast_order - b.cast_order).forEach((actor) => { %>
-        <li><a href="/actor/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %></li>
-      <% }); %>
-    </ul>
+  <h3>Elenco:</h3>
+  <ul>
+    <% movie.cast.sort((a, b) => a.cast_order - b.cast_order).forEach((actor) => { %>
+      <li><a href="/actor/<%= actor.actor_id %>"><%= actor.actor_name %></a> - <%= actor.character_name %></li>
+    <% }); %>
+  </ul>
 
-<<<<<<< HEAD
-<h3>Palabras Clave:</h3>
-<ul>
-  <%
-  const uniqueKeywords = [...new Set(movie.keywords)]; // Eliminar duplicados
-  uniqueKeywords.forEach((keyword) => { %>
-    <li><%= keyword %></li>
-  <% }); %>
-</ul>
-=======
-    <h3>Palabras Clave:</h3>
-    <ul>
-      <% movie.keywords.forEach((keyword) => { %>
-        <li><%= keyword %></li>
-      <% }); %>
-    </ul>
->>>>>>> 6820b4ad90a3b0a766becb4af105987bb033f415
+  <h3>Palabras Clave:</h3>
+  <ul>
+    <% movie.keywords.forEach((keyword) => { %>
+      <li><%= keyword %></li>
+    <% }); %>
+  </ul>
 
-    <div id="inicio"><a href="/">Inicio</a></div>
-  </div>
+  <div id="inicio"><a href="/">Inicio</a></div>
+</div>
 </body>
 </html>
