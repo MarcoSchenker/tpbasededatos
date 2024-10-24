@@ -113,6 +113,7 @@ app.get('/buscar', (req, res) => {
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
     const movieId = req.params.id;
+<<<<<<< HEAD
     const query = `
     SELECT
       movie.*,
@@ -124,11 +125,22 @@ app.get('/pelicula/:id', (req, res) => {
       movie_cast.cast_order,
       department.department_name,
       movie_crew.job,
+=======
+
+    // Consulta para obtener los datos de la película
+    const movieQuery = `
+    SELECT * FROM movie WHERE movie_id = ?;
+    `;
+
+<<<<<<< HEAD
+       -- CODIGO NUEVO
+>>>>>>> 6820b4ad90a3b0a766becb4af105987bb033f415
       genre.genre_name,
       production_company.company_name as production_company,
       language.language_name as movie_language,
       country.country_name,
       keyword.keyword_name as movie_keyword
+<<<<<<< HEAD
     FROM movie
     LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
     LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
@@ -227,9 +239,182 @@ app.get('/pelicula/:id', (req, res) => {
             movieData.keywords = Array.from(movieData.keywords);
 
             res.render('pelicula', { movie: movieData });
+=======
+=======
+    // Consulta para obtener el elenco de la película
+    const castQuery = `
+    SELECT 
+        actor.person_name AS actor_name,
+        actor.person_id AS actor_id,
+        movie_cast.character_name,
+        movie_cast.cast_order
+    FROM 
+        movie_cast 
+    LEFT JOIN person AS actor ON movie_cast.person_id = actor.person_id
+    WHERE movie_cast.movie_id = ?;
+    `;
+>>>>>>> 55adc650f198f71c9ba2cd64b714c99aab4a429b
+
+    // Consulta para obtener el equipo de la película
+    const crewQuery = `
+    SELECT 
+        crew_member.person_name AS crew_member_name,
+        crew_member.person_id AS crew_member_id,
+        department.department_name,
+        movie_crew.job
+    FROM 
+        movie_crew 
+    LEFT JOIN department ON movie_crew.department_id = department.department_id
+    LEFT JOIN person AS crew_member ON crew_member.person_id = movie_crew.person_id
+    WHERE movie_crew.movie_id = ?;
+    `;
+
+    // Consulta para obtener los géneros de la película
+    const genreQuery = `
+    SELECT 
+        genre.genre_name
+    FROM 
+        movie_genres 
+    LEFT JOIN genre ON movie_genres.genre_id = genre.genre_id
+    WHERE movie_genres.movie_id = ?;
+    `;
+
+    // Consulta para obtener las compañías de producción de la película
+    const productionCompanyQuery = `
+    SELECT 
+        production_company.name AS company_name
+    FROM 
+        movie_company
+    LEFT JOIN production_company ON movie_company.company_id = production_company.company_id
+    WHERE movie_company.movie_id = ?;
+    `;
+
+    // Consulta para obtener los idiomas de la película
+    const languageQuery = `
+    SELECT 
+        language.language_name
+    FROM 
+        movie_languages 
+    LEFT JOIN language ON movie_languages.language_id = language.language_id
+    WHERE movie_languages.movie_id = ?;
+    `;
+
+    // Consulta para obtener los países de producción de la película
+    const countryQuery = `
+    SELECT 
+        country.country_name
+    FROM 
+        production_country 
+    LEFT JOIN country ON production_country.country_id = country.country_id
+    WHERE production_country.movie_id = ?;
+    `;
+
+    // Consulta para obtener las palabras clave de la película
+    const keywordQuery = `
+    SELECT 
+        keyword.keyword_name
+    FROM 
+        movie_keywords 
+    LEFT JOIN keyword ON movie_keywords.keyword_id = keyword.keyword_id
+    WHERE movie_keywords.movie_id = ?;
+    `;
+
+    // Ejecutar la consulta de la película
+    db.get(movieQuery, [movieId], (err, movieRow) => {
+        if (err) {
+            console.error(err);
+            return res.status(500).send('Error al cargar los datos de la película.');
+        } 
+        if (!movieRow) {
+            return res.status(404).send('Película no encontrada.');
+>>>>>>> 6820b4ad90a3b0a766becb4af105987bb033f415
         }
+
+        // Inicializar el objeto de película
+        const movieData = {
+            id: movieRow.movie_id,
+            title: movieRow.title,
+            release_date: movieRow.release_date,
+            overview: movieRow.overview,
+            directors: [],
+            writers: [],
+            cast: [],
+            crew: [],
+            genres: [],
+            company_name: [],
+            languages: [],
+            countries: [],
+            keywords: []
+        };
+
+        // Ejecutar las consultas restantes en paralelo
+        const queries = [
+            { query: castQuery, target: 'cast' },
+            { query: crewQuery, target: 'crew' },
+            { query: genreQuery, target: 'genres' },
+            { query: productionCompanyQuery, target: 'company_name' },
+            { query: languageQuery, target: 'languages' },
+            { query: countryQuery, target: 'countries' },
+            { query: keywordQuery, target: 'keywords' },
+        ];
+
+        let completedQueries = 0;
+
+        // Ejecutar todas las consultas
+        queries.forEach(({ query, target }) => {
+            db.all(query, [movieId], (err, rows) => {
+                if (err) {
+                    console.error(err);
+                } else {
+                    if (target === 'cast') {
+                        rows.forEach(row => {
+                            movieData.cast.push({
+                                actor_id: row.actor_id,
+                                actor_name: row.actor_name,
+                                character_name: row.character_name,
+                                cast_order: row.cast_order,
+                            });
+                        });
+                    } else if (target === 'crew') {
+                        rows.forEach(row => {
+                            // Agregar lógica para separar directores y escritores si es necesario
+                            if (row.job === 'Director') {
+                                movieData.directors.push({
+                                    crew_member_id: row.crew_member_id,
+                                    crew_member_name: row.crew_member_name,
+                                });
+                            } else if (row.job === 'Writer') {
+                                movieData.writers.push({
+                                    crew_member_id: row.crew_member_id,
+                                    crew_member_name: row.crew_member_name,
+                                });
+                            } else {
+                                movieData.crew.push({
+                                    crew_member_id: row.crew_member_id,
+                                    crew_member_name: row.crew_member_name,
+                                    department_name: row.department_name,
+                                    job: row.job,
+                                });
+                            }
+                        });
+                    } else {
+                        rows.forEach(row => {
+                            movieData[target].push(target === 'genres' ? row.genre_name : target === 'company_name' ? row.company_name : target === 'languages' ? row.language_name : target === 'countries' ? row.country_name : row.keyword_name);
+                        });
+                    }
+                }
+
+                completedQueries++;
+                // Verificar si todas las consultas han terminado
+                if (completedQueries === queries.length) {
+                    res.render('pelicula', { movie: movieData });
+                }
+            });
+        });
     });
 });
+
+
 
 
 // Ruta para mostrar la página de un actor específico
