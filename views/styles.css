@@ -22,12 +22,14 @@ ul {
 
 li {
     margin: 10px 0;
+    font-size: 18px;
 }
 
 a {
     text-decoration: none;
     color: #0078d4;
     font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 a:hover {
@@ -37,20 +39,27 @@ a:hover {
 .collapsible {
     cursor: pointer;
     user-select: none;
-    padding: 10px;
+    padding: 12px 20px;
     background-color: #0078d4;
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 8px;
     text-align: center;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.collapsible:hover {
+    background-color: #0078d4;
+    transform: scale(1.05);
 }
 
 .content {
     display: none;
-    padding: 10px;
+    padding: 15px;
     background-color: #ffffff;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .active {
@@ -59,12 +68,9 @@ a:hover {
 
 #overview {
     width: 50%;
-    margin: 0 auto; /* Centrar horizontalmente el elemento */
-    padding: 10px; /* Agregar un poco de espacio interior para que se vea mejor */
+    margin: 20px auto; /* Centrar horizontalmente el elemento */
+    padding: 20px; /* Agregar un poco de espacio interior para que se vea mejor */
     background-color: #ffffff; /* Opcional: agregar un fondo blanco al elemento */
-}
-
-#inicio {
-    margin: 0 auto; /* Centrar horizontalmente el elemento */
-    padding: 50px; /* Agregar un poco de espacio interior para que se vea mejor */
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
