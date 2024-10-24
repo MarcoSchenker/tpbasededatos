@@ -69,15 +69,6 @@
   <% }); %>
 </ul>
 
-<h3>Palabras Clave:</h3>
-<ul>
-  <% 
-  const uniqueKeywords = [...new Set(movie.keywords)]; // Eliminar duplicados
-  uniqueKeywords.forEach((keyword) => { %>
-    <li><%= keyword %></li>
-  <% }); %>
-</ul>
-
 <div id="inicio"><a href="/">Inicio</a></div>
 </body>
 </html>
