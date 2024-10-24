@@ -113,8 +113,6 @@ app.get('/buscar', (req, res) => {
 // Ruta para la página de datos de una película particular
 app.get('/pelicula/:id', (req, res) => {
     const movieId = req.params.id;
-    //Te tiene que devolver: Genero, Todo lo de la tabla peli, Pais produccion, la compañia, lenguaje
-    // Consulta SQL para obtener los datos de la película, elenco y crew
     const query = `
     SELECT
       movie.*,
@@ -126,61 +124,38 @@ app.get('/pelicula/:id', (req, res) => {
       movie_cast.cast_order,
       department.department_name,
       movie_crew.job,
-
-
-    ------------------CODIGO NUEVO-------------------
       genre.genre_name,
       production_company.company_name as production_company,
       language.language_name as movie_language,
-<<<<<<< HEAD
-      country.country_name
-=======
-      country.country_name as production_countries,
->>>>>>> fb7f10b003b99f32b71f18ef7b336ea9fa652831
+      country.country_name,
       keyword.keyword_name as movie_keyword
-
-    -------------------------------------------------
     FROM movie
     LEFT JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
     LEFT JOIN person as actor ON movie_cast.person_id = actor.person_id
     LEFT JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
     LEFT JOIN department ON movie_crew.department_id = department.department_id
     LEFT JOIN person as crew_member ON crew_member.person_id = movie_crew.person_id
-    
-    -----------------CODIGO NUEVO---------------------
-    -- genero de la pelicula
     LEFT JOIN movie_genres ON movie.movie_id = movie_genres.movie_id
     LEFT JOIN genre ON movie_genres.genre_id = genre.genre_id
-
-        -- nombre de la compañia de produccion
     LEFT JOIN movie_company ON movie.movie_id = movie_company.movie_id
     LEFT JOIN production_company ON movie_company.company_id = production_company.company_id
-
-        -- lenguaje de la pelicula
     LEFT JOIN movie_languages ON movie.movie_id = movie_languages.movie_id
     LEFT JOIN language ON movie_languages.language_id = language.language_id
-
-        -- pais de produccion
     LEFT JOIN production_country ON movie.movie_id = production_country.movie_id
     LEFT JOIN country ON production_country.country_id = country.country_id
-        -----------------------------------------------
-    -- keyword de la pelicula
-    LEFT JOIN  movie_keywords ON movie.movie_id = movie_keywords.movie_id
-    LEFT JOIN keyword On movie_keywords.keyword_id = keyword.keyword_id
-    WHERE movie.movie_id = ?
-  `;
+    LEFT JOIN movie_keywords ON movie.movie_id = movie_keywords.movie_id
+    LEFT JOIN keyword ON movie_keywords.keyword_id = keyword.keyword_id
+    WHERE movie.movie_id = ?`;
 
-    // Ejecutar la consulta
     db.all(query, [movieId], (err, rows) => {
         if (err) {
-            console.error(err);
-            res.status(500).send('Error al cargar los datos de la película.');
+            console.error('Error al ejecutar la consulta:', err);
+            return res.status(500).send('Error al cargar los datos de la película.');
         } else if (rows.length === 0) {
-            res.status(404).send('Película no encontrada.');
+            return res.status(404).send('Película no encontrada.');
         } else {
-            // Organizar los datos en un objeto de película con elenco y crew
             const movieData = {
-                id: rows[0].id,
+                id: rows[0].movie_id,
                 title: rows[0].title,
                 release_date: rows[0].release_date,
                 overview: rows[0].overview,
@@ -188,72 +163,41 @@ app.get('/pelicula/:id', (req, res) => {
                 writers: [],
                 cast: [],
                 crew: [],
-                genres: [],  // Nuevo campo para géneros
-                production_company: rows[0].production_company, // Nuevo campo para compañía de producción
-                movie_language: rows[0].movie_language, // Nuevo campo para idioma de la película
-                production_countries: [], // Nuevo campo para países de producción
-                keywords: [], // Nuevo campo para palabras clave
+                genres: new Set(),
+                production_company: rows[0].production_company,
+                movie_language: rows[0].movie_language,
+                production_countries: new Set(),
+                keywords: new Set()
             };
 
-            // Agregar géneros
             rows.forEach((row) => {
-                if (row.genre_name) {
-                    movieData.genres.push(row.genre_name);
-                }
+                if (row.genre_name) movieData.genres.add(row.genre_name);
+                if (row.country_name) movieData.production_countries.add(row.country_name);
+                if (row.movie_keyword) movieData.keywords.add(row.movie_keyword);
 
-                if (row.country && !movieData.production_countries.includes(row.country)) {
-                    movieData.production_countries.push(row.country);
-                }
-
-                if (row.movie_keyword && !movieData.keywords.includes(row.movie_keyword)) {
-                    movieData.keywords.push(row.movie_keyword);
-                }
-            });
-
-            // Crear un objeto para almacenar directores
-            rows.forEach((row) => {
-                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
-                    const isDuplicate = movieData.directors.some((crew_member) =>
-                        crew_member.crew_member_id === row.crew_member_id
-                    );
-
-                    if (!isDuplicate && row.department_name === 'Directing' && row.job === 'Director') {
+                if (row.department_name === 'Directing' && row.job === 'Director') {
+                    const isDirectorInList = movieData.directors.some(d => d.crew_member_id === row.crew_member_id);
+                    if (!isDirectorInList) {
                         movieData.directors.push({
                             crew_member_id: row.crew_member_id,
                             crew_member_name: row.crew_member_name,
-                            department_name: row.department_name,
-                            job: row.job,
                         });
                     }
                 }
-            });
 
-            // Crear un objeto para almacenar writers
-            rows.forEach((row) => {
-                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
-                    const isDuplicate = movieData.writers.some((crew_member) =>
-                        crew_member.crew_member_id === row.crew_member_id
-                    );
-
-                    if (!isDuplicate && row.department_name === 'Writing' && row.job === 'Writer') {
+                if (row.department_name === 'Writing' && row.job === 'Writer') {
+                    const isWriterInList = movieData.writers.some(w => w.crew_member_id === row.crew_member_id);
+                    if (!isWriterInList) {
                         movieData.writers.push({
                             crew_member_id: row.crew_member_id,
                             crew_member_name: row.crew_member_name,
-                            department_name: row.department_name,
-                            job: row.job,
                         });
                     }
                 }
-            });
 
-            // Crear un objeto para almacenar el elenco
-            rows.forEach((row) => {
                 if (row.actor_id && row.actor_name && row.character_name) {
-                    const isDuplicate = movieData.cast.some((actor) =>
-                        actor.actor_id === row.actor_id
-                    );
-
-                    if (!isDuplicate) {
+                    const isActorInList = movieData.cast.some(a => a.actor_id === row.actor_id);
+                    if (!isActorInList) {
                         movieData.cast.push({
                             actor_id: row.actor_id,
                             actor_name: row.actor_name,
@@ -262,18 +206,12 @@ app.get('/pelicula/:id', (req, res) => {
                         });
                     }
                 }
-            });
 
-            // Crear un objeto para almacenar el crew
-            rows.forEach((row) => {
-                if (row.crew_member_id && row.crew_member_name && row.department_name && row.job) {
-                    const isDuplicate = movieData.crew.some((crew_member) =>
-                        crew_member.crew_member_id === row.crew_member_id
-                    );
-
-                    if (!isDuplicate && 
-                        row.department_name !== 'Directing' && row.job !== 'Director' &&
-                        row.department_name !== 'Writing' && row.job !== 'Writer') {
+                if (row.crew_member_id && row.department_name && row.job &&
+                    row.department_name !== 'Directing' && row.job !== 'Director' &&
+                    row.department_name !== 'Writing' && row.job !== 'Writer') {
+                    const isCrewInList = movieData.crew.some(c => c.crew_member_id === row.crew_member_id);
+                    if (!isCrewInList) {
                         movieData.crew.push({
                             crew_member_id: row.crew_member_id,
                             crew_member_name: row.crew_member_name,
@@ -283,6 +221,10 @@ app.get('/pelicula/:id', (req, res) => {
                     }
                 }
             });
+
+            movieData.genres = Array.from(movieData.genres);
+            movieData.production_countries = Array.from(movieData.production_countries);
+            movieData.keywords = Array.from(movieData.keywords);
 
             res.render('pelicula', { movie: movieData });
         }
