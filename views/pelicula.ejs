@@ -300,14 +300,17 @@
 
   <h3>Compañía de Producción:</h3>
   <ul>
-    <% movie.company_name.forEach((company) => { %>
-      <li><%= company %></li>
-    <% }); %>
+    <% if (movie.company_name.length > 0) { %>
+      <% movie.company_name.forEach((company) => { %>
+        <li><%= company %></li>
+      <% }); %>
+    <% } else { %>
+      <li>No hay información de la compañía de producción disponible.</li>
+    <% } %>
   </ul>
 
   <h3>Idioma de la Película:</h3>
-  <p><%= movie.languages %></p>
-
+    <%= movie.languages %>
   <h3>País de Producción:</h3>
   <ul>
     <% movie.countries.forEach((country) => { %>
