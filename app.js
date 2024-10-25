@@ -146,7 +146,7 @@ app.get('/pelicula/:id', (req, res) => {
         if (err) {
             console.error(err);
             return res.status(500).send('Error al cargar los datos de la película.');
-        } 
+        }
         if (!movieRow) {
             return res.status(404).send('Película no encontrada.');
         }
@@ -169,19 +169,19 @@ app.get('/pelicula/:id', (req, res) => {
 
         // Ejecutar las consultas restantes
         const queries = [
-            { query: castQuery, target: 'cast' },
-            { query: crewQuery, target: 'crew' },
-            { query: genreQuery, target: 'genres' },
-            { query: productionCompanyQuery, target: 'company_name' },
-            { query: languageQuery, target: 'languages' },
-            { query: countryQuery, target: 'countries' },
-            { query: keywordQuery, target: 'keywords' }
+            {query: castQuery, target: 'cast'},
+            {query: crewQuery, target: 'crew'},
+            {query: genreQuery, target: 'genres'},
+            {query: productionCompanyQuery, target: 'company_name'},
+            {query: languageQuery, target: 'languages'},
+            {query: countryQuery, target: 'countries'},
+            {query: keywordQuery, target: 'keywords'}
         ];
 
         let completedQueries = 0;
 
         // Ejecutar todas las consultas en paralelo
-        queries.forEach(({ query, target }) => {
+        queries.forEach(({query, target}) => {
             db.all(query, [movieId], (err, rows) => {
                 if (err) {
                     console.error(err);
@@ -216,26 +216,30 @@ app.get('/pelicula/:id', (req, res) => {
                                 });
                             }
                         });
-                    } else if (target === 'company_name') { // Este bloque es importante
+                    } else if (target === 'company_name') {
+                        // Asegurarse de que se procesen correctamente las compañías
                         rows.forEach(row => {
-                            movieData.company_name.push(row.company_name);  // Llenar con los nombres de las compañías
+                            movieData.company_name.push(row.company_name);
+                        });
+                    } else if (target === 'countries') {
+                        // Asegurarse de que se procesen correctamente los países
+                        rows.forEach(row => {
+                            movieData.countries.push(row.country_name);
                         });
                     } else {
-                        rows.forEach(row => {
-                            movieData[target].push(row[target.slice(0, -1) + '_name']);
-                        });
+                        const uniqueItems = [...new Set(rows.map(row => row[target.slice(0, -1) + '_name']))];
+                        movieData[target] = uniqueItems;
                     }
                 }
 
                 completedQueries++;
                 if (completedQueries === queries.length) {
-                    res.render('pelicula', { movie: movieData });
+                    res.render('pelicula', {movie: movieData});
                 }
             });
         });
     });
 });
-
 // Ruta para mostrar la página de un actor específico
 app.get('/actor/:id', (req, res) => {
     const actorId = req.params.id;

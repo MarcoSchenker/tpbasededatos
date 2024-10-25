@@ -144,7 +144,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><%= movie.title %></title>
-  <link rel="stylesheet" href="/styles.css">
+  <link rel="stylesheet" href="styles.css">
   <style>
     /* General styles for the body */
     body {
@@ -298,27 +298,36 @@
     <% }); %>
   </ul>
 
-  <h3>Compañía de Producción:</h3>
-  <ul>
-    <% if (movie.company_name.length > 0) { %>
-      <% movie.company_name.forEach((company) => { %>
-        <li><%= company %></li>
-      <% }); %>
-    <% } else { %>
-      <li>No hay información de la compañía de producción disponible.</li>
-    <% } %>
-  </ul>
+    <h3>Compañía de Producción:</h3>
+    <ul>
+        <% if (movie.company_name.length > 0) { %>
+            <% movie.company_name.forEach((company) => { %>
+                <li><%= company %></li>
+            <% }); %>
+        <% } else { %>
+            <li>No hay información de la compañía de producción disponible.</li>
+        <% } %>
+    </ul>
 
-  <h3>Idioma de la Película:</h3>
-    <%= movie.languages %>
-  <h3>País de Producción:</h3>
-  <ul>
-    <% movie.countries.forEach((country) => { %>
-      <li><%= country %></li>
-    <% }); %>
-  </ul>
+    <h3>Idioma de la Película:</h3>
+    <ul>
+        <% movie.languages.forEach((language) => { %>
+            <li><%= language %></li>
+        <% }); %>
+    </ul>
 
-  <h3>Dirigida por:</h3>
+    <h3>País de Producción:</h3>
+    <ul>
+        <% if (movie.countries.length > 0) { %>
+            <% movie.countries.forEach((country) => { %>
+                <li><%= country %></li>
+            <% }); %>
+        <% } else { %>
+            <li>No hay información del país de producción disponible.</li>
+        <% } %>
+    </ul>
+
+    <h3>Dirigida por:</h3>
   <ul>
     <% movie.directors.forEach((director) => { %>
       <li>
