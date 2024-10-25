@@ -1,127 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
-  <style>
+    <style>
 
-      body {
-          font-family: 'Arial', sans-serif;
-          background-color: #f5f5f5;
-          color: #333333;
-          margin: 0;
-          padding: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-      }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f5f5f5;
+            color: #333333;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-      h1 {
-          font-size: 36px;
-          color: #333333;
-          margin-bottom: 20px;
-      }
+        h1 {
+            font-size: 36px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
 
-      h2 {
-          font-size: 28px;
-          margin-bottom: 15px;
-          padding-bottom: 5px;
-      }
+        h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
 
-      ul {
-          list-style: none;
-          padding: 0;
-          width: 100%;
-          max-width: 600px;
-      }
+        ul {
+            list-style: none;
+            padding: 0;
+            width: 100%;
+            max-width: 600px;
+        }
 
-      li {
-          background-color: #ffffff;
-          margin: 10px 0;
-          padding: 15px;
-          border-radius: 8px;
-          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease;
-      }
+        li {
+            background-color: #ffffff;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
 
-      li:hover {
-          transform: translateY(-5px);
-      }
+        li:hover {
+            transform: translateY(-5px);
+        }
 
-      a {
-          text-decoration: none;
-          color: #0078d4;
-          font-weight: bold;
-          transition: color 0.3s ease;
-      }
+        a {
+            text-decoration: none;
+            color: #0078d4;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
 
-      a:hover {
-          color: #0056b3;
-      }
+        a:hover {
+            color: #0056b3;
+        }
 
-      #inicio a {
-          display: inline-block;
-          padding: 10px 20px;
-          background-color: #0078d4;
-          color: white;
-          text-decoration: none;
-          border-radius: 5px;
-          margin-top: 20px;
-          transition: background-color 0.3s ease;
-      }
+        #inicio a {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #0078d4;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
 
-      #inicio a:hover {
-          background-color: #0056b3;
-      }
+        #inicio a:hover {
+            background-color: #0056b3;
+        }
 
-  </style>
-  <title>Resultado de la Búsqueda</title>
-  <link rel="stylesheet" href="/styles.css">
+    </style>
+    <title>Resultado de la Búsqueda</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <h1>Resultados para "<%= searchTerm %>"</h1>
+<h1>Resultados para "<%= searchTerm %>"</h1>
 
-  <!-- Generamos links a partir de los IDs (person o movie) que nos llevan a la página de la película, el actor o el director-->
-  <% if (type === 'movie' && results.length > 0) { %>
-    <h2>Películas</h2>
-    <ul>
-      <% results.forEach(movie => { %>
-        <!-- Hay que aclarar que id = movie_id , name = title (esto lo define cuando hace la query a la hora de buscar) -->
-        <!-- Este es un link que busca por el Pelicula-->
-        <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
-      <% }) %>
-    </ul>
-  <% } else if (type === 'actor' && results.length > 0) { %>
-    <h2>Actores</h2>
-    <ul>
-      <!-- Hay que aclarar que id = person_id , name = person_name (esto lo define cuando hace la query a la hora de buscar) -->
-      <!-- Este es un link que busca por el Actor-->
-      <% results.forEach(actor => { %>
-        <li><a href="/actor/<%= actor.id %>"><%= actor.name %></a></li>
-      <% }) %>
-    </ul>
-  <% } else if (type === 'director' && results.length > 0) { %>
-    <h2>Directores</h2>
-    <ul>
-      <% results.forEach(director => { %>
-        <!-- Hay que aclarar que id = person_id , name = person_name (esto lo define cuando hace la query a la hora de buscar) -->
-        <!-- Este es un link que busca por el director-->
-        <li><a href="/director/<%= director.id %>"><%= director.name %></a></li>
-      <% }) %>
-    </ul>
-  <% } else if (type === 'keyword' && results.length > 0) { %> <!-- agrego buscador por keyword que busca mis peliculas con esa keyword -->
-      <h2>Películas</h2>
-      <ul>
-          <% results.forEach(movie => { %>
-              <!-- Hay que aclarar que id = movie_id , name = title (esto lo define cuando hace la query a la hora de buscar) -->
-              <!-- Este es un link que busca por el Pelicula-->
-              <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
-          <% }) %>
-      </ul>
-  <% }
+<!-- Sección para mostrar resultados de películas -->
+<% if (type === 'movie' || type === 'todo') { %>
+    <% if (results.filter(item => item.type === 'movie').length > 0) { %>
+        <h2>Películas</h2>
+        <ul>
+            <% results.filter(movie => movie.type === 'movie').forEach(movie => { %>
+                <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } %>
+<% } %>
 
-  else { %>
+<!-- Sección para mostrar resultados de actores -->
+<% if (type === 'actor' || type === 'todo') { %>
+    <% if (results.filter(item => item.type === 'actor').length > 0) { %>
+        <h2>Actores</h2>
+        <ul>
+            <% results.filter(actor => actor.type === 'actor').forEach(actor => { %>
+                <li><a href="/actor/<%= actor.id %>"><%= actor.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } %>
+<% } %>
+
+<!-- Sección para mostrar resultados de directores -->
+<% if (type === 'director' || type === 'todo') { %>
+    <% if (results.filter(item => item.type === 'director').length > 0) { %>
+        <h2>Directores</h2>
+        <ul>
+            <% results.filter(director => director.type === 'director').forEach(director => { %>
+                <li><a href="/director/<%= director.id %>"><%= director.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } %>
+<% } %>
+
+<!-- Sección para mostrar resultados de palabras clave -->
+<% if (type === 'keyword' || type === 'todo') { %>
+    <% if (results.filter(item => item.type === 'keyword').length > 0) { %>
+        <h2>Películas (por Palabras Clave)</h2>
+        <ul>
+            <% results.filter(movie => movie.type === 'keyword').forEach(movie => { %>
+                <li><a href="/pelicula/<%= movie.id %>"><%= movie.name %></a></li>
+            <% }) %>
+        </ul>
+    <% } %>
+<% } %>
+
+<!-- Mensaje cuando no se encuentran resultados -->
+<% if (results.length === 0) { %>
     <p>No se encontraron resultados.</p>
-  <% } %>
+<% } %>
 
-  <div id="inicio"><a href="/">Inicio</a></div>
+<div id="inicio"><a href="/">Inicio</a></div>
 </body>
 </html>
