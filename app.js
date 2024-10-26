@@ -243,42 +243,72 @@ app.get('/pelicula/:id', (req, res) => {
 // Ruta para mostrar la página de un actor específico
 app.get('/actor/:id', (req, res) => {
     const actorId = req.params.id;
-    const query = `
-    SELECT DISTINCT person.person_name as actorName, movie.* 
-    FROM movie  
-    INNER JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
-    INNER JOIN person ON person.person_id = movie_cast.person_id
-    WHERE movie_cast.person_id = ?`;
 
-    db.all(query, [actorId], (err, movies) => {
+    // Consultas para películas en las que actuó y dirigió
+    const actingQuery = `
+        SELECT DISTINCT person.person_name as actorName, movie.* 
+        FROM movie  
+        INNER JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
+        INNER JOIN person ON person.person_id = movie_cast.person_id
+        WHERE movie_cast.person_id = ?
+    `;
+    const directingQuery = `
+        SELECT DISTINCT movie.* 
+        FROM movie
+        INNER JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
+        INNER JOIN person ON person.person_id = movie_crew.person_id
+        WHERE movie_crew.job = 'Director' AND movie_crew.person_id = ?
+    `;
+
+    db.all(actingQuery, [actorId], (err, actingMovies) => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error al cargar las películas del actor.');
-        } else {
-            const actorName = movies.length > 0 ? movies[0].actorName : '';
-            res.render('actor', { actorName, movies });
+            return res.status(500).send('Error al cargar las películas del actor.');
         }
+        db.all(directingQuery, [actorId], (err, directingMovies) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error al cargar las películas como director.');
+            }
+
+            const actorName = actingMovies.length > 0 ? actingMovies[0].actorName : (directingMovies[0] ? directingMovies[0].actorName : '');
+            res.render('actor', { actorName, actingMovies, directingMovies });
+        });
     });
 });
 
-// Ruta para mostrar la página de un director específico
 app.get('/director/:id', (req, res) => {
     const directorId = req.params.id;
-    const query = `
-    SELECT DISTINCT person.person_name as directorName, movie.* 
-    FROM movie
-    INNER JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
-    INNER JOIN person ON person.person_id = movie_crew.person_id
-    WHERE movie_crew.job = 'Director' AND movie_crew.person_id = ?`;
 
-    db.all(query, [directorId], (err, movies) => {
+    // Consultas para películas en las que actuó y dirigió
+    const directingQuery = `
+        SELECT DISTINCT person.person_name as directorName, movie.* 
+        FROM movie
+        INNER JOIN movie_crew ON movie.movie_id = movie_crew.movie_id
+        INNER JOIN person ON person.person_id = movie_crew.person_id
+        WHERE movie_crew.job = 'Director' AND movie_crew.person_id = ?
+    `;
+    const actingQuery = `
+        SELECT DISTINCT movie.* 
+        FROM movie
+        INNER JOIN movie_cast ON movie.movie_id = movie_cast.movie_id
+        INNER JOIN person ON person.person_id = movie_cast.person_id
+        WHERE movie_cast.person_id = ?
+    `;
+    db.all(directingQuery, [directorId], (err, directingMovies) => {
         if (err) {
             console.error(err);
-            res.status(500).send('Error al cargar las películas del director.');
-        } else {
-            const directorName = movies.length > 0 ? movies[0].directorName : '';
-            res.render('director', { directorName, movies });
+            return res.status(500).send('Error al cargar las películas del director.');
         }
+        db.all(actingQuery, [directorId], (err, actingMovies) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send('Error al cargar las películas como actor.');
+            }
+
+            const directorName = directingMovies.length > 0 ? directingMovies[0].directorName : (actingMovies[0] ? actingMovies[0].directorName : '');
+            res.render('director', { directorName, actingMovies, directingMovies });
+        });
     });
 });
 
